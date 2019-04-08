@@ -49,7 +49,11 @@ class TeamsController < ApplicationController
 
   def team_owner_change
     if @team.update(owner_id: params[:user_id])
+      TeamMailer.with(team: @team.name, email: @team.owner.email).owner_change_mail.deliver_later
       redirect_to team_path(@team), notice: 'チームリーダーを変更しました！'
+    else
+      flash.now[:error] = 'チームリーダーの変更に失敗しました、、'
+      render :show
     end
   end
 
