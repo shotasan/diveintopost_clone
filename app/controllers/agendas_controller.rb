@@ -1,5 +1,6 @@
 class AgendasController < ApplicationController
   before_action :set_agenda, only: %i[destroy]
+  before_action :require_owner, only: %i[destroy]
 
   def index
     @agendas = Agenda.all
@@ -34,5 +35,11 @@ class AgendasController < ApplicationController
 
   def agenda_params
     params.fetch(:agenda, {}).permit %i[title description]
+  end
+
+  def require_owner
+    unless current_user.id == @agenda.user_id || current_user.id == @agenda.team.owner_id
+      raise ActionController::RoutingError, 'Not Found'
+    end
   end
 end
