@@ -24,6 +24,7 @@ class AgendasController < ApplicationController
 
   def destroy
     @agenda.destroy
+    AgendaMailer.with(email: @agenda.team.users.pluck(:email), title: @agenda.title).agenda_deleted_mail.deliver_later
     redirect_to dashboard_path, notice: 'アジェンダ削除に成功しました！'
   end
 
