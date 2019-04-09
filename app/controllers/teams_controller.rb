@@ -15,7 +15,11 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  def edit; end
+  def edit
+    unless @team.owner == current_user
+      raise raise ActionController::RoutingError, 'Not Found'
+    end
+  end
 
   def create
     @team = Team.new(team_params)
