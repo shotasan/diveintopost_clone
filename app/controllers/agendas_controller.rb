@@ -18,13 +18,13 @@ class AgendasController < ApplicationController
     if current_user.save && @agenda.save
       redirect_to dashboard_url, notice: 'アジェンダ作成に成功しました！'
     else
-      render :new
+      redirect_to team_path(@agenda.team_id), flash: { notice: @agenda.errors.full_messages.first }
     end
   end
 
   def destroy
     @agenda.destroy
-    AgendaMailer.with(email: @agenda.team.users.pluck(:email), title: @agenda.title).agenda_deleted_mail.deliver_later
+    AgendaMailer.with(email: @agenda.team.members.pluck(:email), title: @agenda.title).agenda_deleted_mail.deliver_later
     redirect_to dashboard_path, notice: 'アジェンダ削除に成功しました！'
   end
 
