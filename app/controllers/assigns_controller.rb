@@ -4,7 +4,7 @@ class AssignsController < ApplicationController
   def create
     team = Team.friendly.find(params[:team_id])
     user = email_reliable?(assign_params) ? User.find_or_create_by_email(assign_params) : nil
-    if user
+    if new_member?(team, user)
       team.invite_member(user)
       redirect_to team_url(team), notice: 'アサインしました！'
     else
@@ -50,7 +50,7 @@ class AssignsController < ApplicationController
     change_keep_team(assigned_user, another_team) if assigned_user.keep_team_id == assign.team_id
   end
 
-  def require_owner_or_oneself
-
+  def new_member?(team, user)
+    !team.members.pluck(:email).include?(user.email)
   end
 end
