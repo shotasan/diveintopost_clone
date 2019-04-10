@@ -41,6 +41,12 @@ class AgendasController < ApplicationController
   end
 
   def require_owner
+<<<<<<< HEAD
     raise ActionController::RoutingError, 'Not Found' unless oneself?(@agenda) || owner?(@agenda)
+=======
+    unless current_user.id == @agenda.user_id || current_user.id == @agenda.team.owner_id
+      raise ActionController::RoutingError, 'Not Found'
+    end
+>>>>>>> 8ca44d5f8188d4c229555b40cb7d5c8f74f80e75
   end
 end
