@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
     user.save!
   end
 
+
+
   private
 
   def set_working_team

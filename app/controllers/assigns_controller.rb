@@ -14,9 +14,12 @@ class AssignsController < ApplicationController
 
   def destroy
     assign = Assign.find(params[:id])
-    destroy_message = assign_destroy(assign, assign.user)
-
-    redirect_to team_url(params[:team_id]), notice: destroy_message
+    if assign.team.owner_id == current_user.id || assign.user_id == current_user.id
+      destroy_message = assign_destroy(assign, assign.user)
+      redirect_to team_url(params[:team_id]), notice: destroy_message
+    else
+      raise raise ActionController::RoutingError, 'Not Found'
+    end
   end
 
   private
@@ -35,8 +38,8 @@ class AssignsController < ApplicationController
       'メンバーを削除しました。'
     else
       'なんらかの原因で、削除できませんでした。'
-    end    
-  end  
+    end
+  end
   
   def email_reliable?(address)
     address.match(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
@@ -45,5 +48,9 @@ class AssignsController < ApplicationController
   def set_next_team(assign, assigned_user)
     another_team = Assign.find_by(user_id: assigned_user.id).team
     change_keep_team(assigned_user, another_team) if assigned_user.keep_team_id == assign.team_id
+  end
+
+  def require_owner_or_oneself
+
   end
 end
