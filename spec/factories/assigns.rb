@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :assign do
-    user nil
-    team nil
+    user_id {nil}
+    team_id {nil}
   end
 end

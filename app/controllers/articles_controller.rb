@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_article, only: %i[show edit update destroy]
+  before_action :team_concerned, only: %i[show edit update destroy]
 
   def index
     @agendas = Agenda.all
@@ -8,10 +9,10 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @comments = @article.comments
-    @comment = @article.comments.build
-    @working_team = @article.team
-    change_keep_team(current_user, @working_team)
+      @comments = @article.comments
+      @comment = @article.comments.build
+      @working_team = @article.team
+      change_keep_team(current_user, @working_team)
   end
 
   def new
@@ -32,7 +33,7 @@ class ArticlesController < ApplicationController
     if article.save
       redirect_to article_url(article), notice: '記事作成に成功しました！'
     else
-      render :new
+      redirect_to new_agenda_article_path, notice: '記事作成に失敗しました、、、'
     end
   end
 
@@ -57,5 +58,9 @@ class ArticlesController < ApplicationController
 
   def article_params
     params.fetch(:article, {}).permit %i[title content image image_cache]
+  end
+
+  def team_concerned
+    current_user.teams.pluck(:team_id).include?(@article.team_id) ? true : (raise ActionController::RoutingError, 'Not Found')
   end
 end

@@ -1,0 +1,11 @@
+ja:
+  activerecord:
+    models:
+      comment: "コメント"
+    attributes:
+      comment:
+        content: "内容"
+      agenda:
+        title: "タイトル"
+      team:
+        name: "チーム名"

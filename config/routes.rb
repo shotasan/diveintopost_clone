@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   
   resources :teams do
     resources :assigns, only: %w(create destroy)
-    resources :agendas, shallow: true do
+    resources :agendas, only: %w(index new create destroy), shallow: true do
       resources :articles do
-        resources :comments
+        resources :comments, only: %w(create edit update destroy)
       end
     end
   end

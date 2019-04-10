@@ -1,10 +1,12 @@
 class AssignsController < ApplicationController
+  include Common
+
   before_action :authenticate_user!
 
   def create
     team = Team.friendly.find(params[:team_id])
     user = email_reliable?(assign_params) ? User.find_or_create_by_email(assign_params) : nil
-    if user
+    if user && new_member?(team, user)
       team.invite_member(user)
       redirect_to team_url(team), notice: 'アサインしました！'
     else
@@ -14,7 +16,7 @@ class AssignsController < ApplicationController
 
   def destroy
     assign = Assign.find(params[:id])
-    if assign.team.owner_id == current_user.id || assign.user_id == current_user.id
+    if oneself?(assign) || owner?(assign)
       destroy_message = assign_destroy(assign, assign.user)
       redirect_to team_url(params[:team_id]), notice: destroy_message
     else
@@ -50,7 +52,7 @@ class AssignsController < ApplicationController
     change_keep_team(assigned_user, another_team) if assigned_user.keep_team_id == assign.team_id
   end
 
-  def require_owner_or_oneself
-
+  def new_member?(team, user)
+    !team.members.pluck(:email).include?(user.email)
   end
 end

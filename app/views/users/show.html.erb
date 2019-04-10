@@ -10,7 +10,7 @@
               <%= image_tag default_img(nil), class: 'img' %><br>
               <%= @user.email %>
             </div>
-            <%= link_to 'プロフィールを編集', '#', class: 'btn btn-success btn-block mt-3' %>
+            <%= link_to 'プロフィールを編集', edit_user_path, class: 'btn btn-success btn-block mt-3' %>
           </div>
 
           <div class="col-md-8">
