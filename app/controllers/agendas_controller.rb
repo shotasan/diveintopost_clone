@@ -1,4 +1,6 @@
 class AgendasController < ApplicationController
+  include Common
+
   before_action :set_agenda, only: %i[destroy]
   before_action :require_owner, only: %i[destroy]
 
@@ -39,8 +41,6 @@ class AgendasController < ApplicationController
   end
 
   def require_owner
-    unless current_user.id == @agenda.user_id || current_user.id == @agenda.team.owner_id
-      raise ActionController::RoutingError, 'Not Found'
-    end
+    raise ActionController::RoutingError, 'Not Found' unless oneself?(@agenda) || owner?(@agenda)
   end
 end

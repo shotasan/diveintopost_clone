@@ -1,4 +1,3 @@
-<%# binding.pry %>
 <p id="notice"><%= notice %></p>
 
 <div class="row">
@@ -11,7 +10,7 @@
               <%= image_tag default_img(@team.icon_url), class: 'img' %><br>
               <%= @team.name %>
             </div>
-            <% if owner? %>
+            <% if @team.owner %>
               <%= link_to 'チーム情報を編集する', edit_team_path(@team), class: 'btn btn-success btn-block mt-3' %>
             <% end %>
           </div>
@@ -44,10 +43,10 @@
                     <tr>
                       <td><%= image_tag 'default.jpg', size: '40x40' %></td>
                       <td><%= assign.user.email %></td>
-                      <% if owner? %>
+                      <% if owner?(assign) %>
                         <td><%= link_to '削除', team_assign_path(@team, assign), method: :delete, class: 'btn btn-sm btn-danger' %></td>
                         <td><%= link_to '権限移動', team_owner_change_path(id: @team, user_id: assign.user_id), class: 'btn btn-sm btn-danger' %></td>
-                      <% elsif owner? || oneself?(assign) %>
+                      <% elsif owner?(assign) || oneself?(assign) %>
                         <td><%= link_to '削除', team_assign_path(@team, assign), method: :delete, class: 'btn btn-sm btn-danger' %></td>
                       <% end %>
                     </tr>

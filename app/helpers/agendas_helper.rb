@@ -6,12 +6,4 @@ module AgendasHelper
       agenda_path
     end
   end
-
-  def agenda_owner?(agenda)
-    agenda.user_id == current_user.id
-  end
-
-  def team_owner?(agenda)
-    agenda.team.owner_id == current_user.id
-  end
 end

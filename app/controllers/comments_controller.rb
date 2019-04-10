@@ -23,8 +23,6 @@ class CommentsController < ApplicationController
       redirect_to article_path(@article)
     else
       render :edit
-      # flash[:notice] = @comment.errors.full_messages.first
-      # redirect_to edit_comment_path
     end
   end
 
