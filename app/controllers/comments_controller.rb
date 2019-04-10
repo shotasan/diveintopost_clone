@@ -19,7 +19,13 @@ class CommentsController < ApplicationController
   def update
     @comment = Comment.find(params[:id])
     @article = @comment.article
-    redirect_to article_path(@article) if @comment.update(comment_params)
+    if @comment.update(comment_params)
+      redirect_to article_path(@article)
+    else
+      render :edit
+      # flash[:notice] = @comment.errors.full_messages.first
+      # redirect_to edit_comment_path
+    end
   end
 
   def destroy
